@@ -1,10 +1,10 @@
 import Layout from "./components/Layout/Layout";
-import Countdown from "./components/Countdown/Countdown";
+import CountDown from "./components/CountDown/Countdown";
 
 function App() {
   return (
     <Layout>
-      <Countdown />
+      <CountDown />
     </Layout>
   );
 }
