@@ -8,7 +8,6 @@
 }
 
 :root {
-  /* font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif; */
   line-height: 1.5;
   font-weight: 400;
   font-synthesis: none;
@@ -21,6 +20,23 @@
   background-position: cover;
   background-size: 100% 100%;
   background-attachment: fixed;
+}
+
+.refresh-button:hover {
+  background-color: transparent !important;
+  border: none;
+}
+
+.refresh-button .icon {
+  margin-left: 1rem;
+  stroke: white;
+  width: 2rem;
+  height: 2rem;
+}
+
+.refresh-button-animation {
+  transition: ease-in-out 0.6s;
+  transform: rotate(360deg);
 }
 
 @layer base {
