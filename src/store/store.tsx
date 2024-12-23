@@ -14,6 +14,7 @@ interface TimerState {
   sessionData: SessionData;
   intervalID: string;
   isCountDownOn: boolean;
+  customSequence: boolean;
   setTimerData: () => void;
   setCurrentIntervalID: (id: NodeJS.Timeout) => void;
   setIsCountDownOn: (val: boolean) => void;
@@ -32,6 +33,7 @@ export const useTimerStore = create<TimerState>()(
     sessionData: { pomodoro: 25, shortBreak: 5, longBreak: 15 },
     intervalID: "",
     isCountDownOn: false,
+    customSequence: false,
 
     setTimerData: () =>
       set((state) => {
@@ -39,25 +41,27 @@ export const useTimerStore = create<TimerState>()(
 
         if (seconds === 0) {
           if (minutes === 0) {
-            const nextSession =
-              state.activeSession === SessionTypes.Pomodoro
-                ? SessionTypes.ShortBreak
-                : state.shortBreakCount !== 0 && state.shortBreakCount % 4 === 0
-                ? SessionTypes.LongBreak
-                : SessionTypes.Pomodoro;
-
             const updatedShortBreakCount =
               state.activeSession === SessionTypes.ShortBreak
                 ? state.shortBreakCount + 1
                 : state.shortBreakCount;
 
-            const zm = state.sessionData[nextSession];
+            const nextSession =
+              state.activeSession === SessionTypes.Pomodoro
+                ? SessionTypes.ShortBreak
+                : state.activeSession !== SessionTypes.LongBreak &&
+                  state.shortBreakCount !== 0 &&
+                  updatedShortBreakCount % 4 === 0
+                ? SessionTypes.LongBreak
+                : SessionTypes.Pomodoro;
+
+            const nextSessionMinutes = state.sessionData[nextSession];
 
             return {
               activeSession: nextSession,
               shortBreakCount: updatedShortBreakCount,
               timerData: {
-                minutes: zm,
+                minutes: nextSessionMinutes,
                 seconds: 0,
               },
             };
