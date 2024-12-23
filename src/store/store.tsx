@@ -1,46 +1,97 @@
 import { create } from "zustand";
+import { immer } from "zustand/middleware/immer";
+
+import { SessionTypes } from "@/types/types";
+
+type SessionData = {
+  [key in SessionTypes]: number;
+};
 
 interface TimerState {
-  currentTime: { minutes: number; seconds: number };
-  intervalID: NodeJS.Timeout | string;
+  activeSession: SessionTypes;
+  shortBreakCount: number;
+  timerData: { minutes: number; seconds: number };
+  sessionData: SessionData;
+  intervalID: string;
   isCountDownOn: boolean;
-  setCurrentTime: () => void;
+  setTimerData: () => void;
   setCurrentIntervalID: (id: NodeJS.Timeout) => void;
   setIsCountDownOn: (val: boolean) => void;
   clearTimer: () => void;
+  setSessionType: (id: SessionTypes) => void;
 }
 
-export const useTimerStore = create<TimerState>()((set) => ({
-  currentTime: {
-    minutes: 25,
-    seconds: 0,
-  },
-  intervalID: "",
-  isCountDownOn: false,
+export const useTimerStore = create<TimerState>()(
+  immer((set) => ({
+    activeSession: SessionTypes.Pomodoro,
+    shortBreakCount: 0,
+    timerData: {
+      minutes: 25,
+      seconds: 0,
+    },
+    sessionData: { pomodoro: 25, shortBreak: 5, longBreak: 15 },
+    intervalID: "",
+    isCountDownOn: false,
 
-  setCurrentTime: () =>
-    set((state) => {
-      const { minutes, seconds } = state.currentTime;
-      if (seconds === 0) {
-        if (minutes === 0) {
-          clearTimeout(state.intervalID);
-          return { ...state, currentTime: { ...state.currentTime } };
+    setTimerData: () =>
+      set((state) => {
+        const { minutes, seconds } = state.timerData;
+
+        if (seconds === 0) {
+          if (minutes === 0) {
+            const nextSession =
+              state.activeSession === SessionTypes.Pomodoro
+                ? SessionTypes.ShortBreak
+                : state.shortBreakCount !== 0 && state.shortBreakCount % 4 === 0
+                ? SessionTypes.LongBreak
+                : SessionTypes.Pomodoro;
+
+            const updatedShortBreakCount =
+              state.activeSession === SessionTypes.ShortBreak
+                ? state.shortBreakCount + 1
+                : state.shortBreakCount;
+
+            const zm = state.sessionData[nextSession];
+
+            return {
+              activeSession: nextSession,
+              shortBreakCount: updatedShortBreakCount,
+              timerData: {
+                minutes: zm,
+                seconds: 0,
+              },
+            };
+          }
+          return {
+            timerData: { minutes: minutes - 1, seconds: 59 },
+          };
         }
-        return { ...state, currentTime: { minutes: minutes - 1, seconds: 59 } };
-      }
 
-      return { ...state, currentTime: { minutes, seconds: seconds - 1 } };
-    }),
-  setCurrentIntervalID: (id) => set((state) => ({ ...state, intervalID: id })),
-  setIsCountDownOn: (val) => set((state) => ({ ...state, isCountDownOn: val })),
-  clearTimer: () =>
-    set((state) => {
-      clearTimeout(state.intervalID);
-      return {
-        ...state,
-        currentTime: { minutes: 25, seconds: 0 },
-        isCountDownOn: false,
-        intervalID: "",
-      };
-    }),
-}));
+        return { timerData: { minutes, seconds: seconds - 1 } };
+      }),
+    setCurrentIntervalID: (id) => set(() => ({ intervalID: id })),
+    setIsCountDownOn: (val) => set(() => ({ isCountDownOn: val })),
+    clearTimer: () =>
+      set((state) => {
+        clearTimeout(state.intervalID);
+        return {
+          timerData: { minutes: 25, seconds: 0 },
+          isCountDownOn: false,
+          intervalID: "",
+        };
+      }),
+    setSessionType: (id) =>
+      set((state) => {
+        if (id === state.activeSession) {
+          return state;
+        }
+        clearTimeout(state.intervalID);
+        return {
+          activeSession: id,
+          timerData: { minutes: state.sessionData[id], seconds: 0 },
+          intervalID: "",
+          isCountDownOn: false,
+        };
+      }),
+  }))
+);
