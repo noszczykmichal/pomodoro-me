@@ -8,17 +8,28 @@ type SessionData = {
 };
 
 interface TimerState {
+  /** used to specify the active session type; utilized in the SessionButton to apply
+   * styles that indicate which session is currently active  */
   activeSession: SessionTypes;
+  /** allows tracking the count of short breaks and, consequently the number of completed
+   * working sessions */
   shortBreakCount: number;
+  /** stores the current reading of the timer */
   timerData: { minutes: number; seconds: number };
+  /** current length settings for each session type */
   sessionData: SessionData;
+  /** used for storing the id of the currently running setInterval; utilized for pausing and resuming
+   * the currently running timer */
   intervalID: string;
+  /** used within TimerControls to switch the button text between start/pause */
   isCountDownOn: boolean;
   customSequence: boolean;
   setTimerData: () => void;
   setCurrentIntervalID: (id: NodeJS.Timeout) => void;
   setIsCountDownOn: (val: boolean) => void;
+  /** used within the RefreshButton to reset the current reading of the timer */
   clearTimer: () => void;
+  /* used to change the session type within the SessionButton*/
   setSessionType: (id: SessionTypes) => void;
 }
 
