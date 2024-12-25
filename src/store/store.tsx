@@ -89,8 +89,9 @@ export const useTimerStore = create<TimerState>()(
     clearTimer: () =>
       set((state) => {
         clearTimeout(state.intervalID);
+        const minutesForActiveSession = state.sessionData[state.activeSession];
         return {
-          timerData: { minutes: 25, seconds: 0 },
+          timerData: { minutes: minutesForActiveSession, seconds: 0 },
           isCountDownOn: false,
           intervalID: "",
         };
