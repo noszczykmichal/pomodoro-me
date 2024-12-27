@@ -20,7 +20,7 @@ const RefreshButton: FC<RefreshButtonProps> = ({ onButtonClick }) => {
     <Button
       variant="outline"
       size="icon"
-      className="refresh-button bg-transparent border-none"
+      className="refresh-button bg-transparent border-none mx-[8px]"
       onClick={rotateHandler}
     >
       <RotateCw id="refresh" className="icon" />

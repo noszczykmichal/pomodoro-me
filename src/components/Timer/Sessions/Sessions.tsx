@@ -13,7 +13,7 @@ const Sessions = () => {
   ];
 
   return (
-    <header className="">
+    <header className="pb-[20px]">
       {sessionsConfig.map((session) => (
         <SessionButton key={session.id} id={session.id} label={session.name} />
       ))}
