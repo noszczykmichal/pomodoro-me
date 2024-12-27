@@ -44,6 +44,7 @@ export const useTimerStore = create<TimerState>()(
     sessionData: { pomodoro: 25, shortBreak: 5, longBreak: 15 },
     intervalID: "",
     isCountDownOn: false,
+
     customSequence: false,
 
     setTimerData: () =>

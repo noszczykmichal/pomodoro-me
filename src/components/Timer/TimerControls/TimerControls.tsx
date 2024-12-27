@@ -1,11 +1,13 @@
 import { useTimerStore } from "@/store/store";
 import { Button } from "@/components/ui/button";
 import RefreshButton from "./RefreshButton/RefreshButton";
+import SettingsDialog from "@/components/SettingsDialog/SettingsDialog";
 
 const TimerControls = () => {
   const {
     intervalID,
     isCountDownOn,
+
     setTimerData,
     setCurrentIntervalID,
     setIsCountDownOn,
@@ -23,7 +25,7 @@ const TimerControls = () => {
     setCurrentIntervalID(intervalRef);
   };
   return (
-    <div className="flex space justify-around">
+    <div className="flex space justify-around pt-[20px]">
       <Button
         variant="outline"
         className="flex justify-center rounded-[20px] items-stretch
@@ -33,6 +35,7 @@ const TimerControls = () => {
         {isCountDownOn ? "pause" : "start"}
       </Button>
       <RefreshButton onButtonClick={clearTimer} />
+      <SettingsDialog />
     </div>
   );
 };
