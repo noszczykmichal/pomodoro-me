@@ -3,3 +3,5 @@ export enum SessionTypes {
   ShortBreak = "shortBreak",
   LongBreak = "longBreak",
 }
+
+export type DialogNavItem = "general" | "timers";
