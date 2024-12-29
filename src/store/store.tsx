@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
-import { SessionTypes } from "@/types/types";
+import { SessionTypes, DialogNavItem } from "@/types/types";
 
 type SessionData = {
   [key in SessionTypes]: number;
@@ -23,6 +23,7 @@ interface TimerState {
   intervalID: string;
   /** used within TimerControls to switch the button text between start/pause */
   isCountDownOn: boolean;
+  currentDialogNavItem: DialogNavItem;
   customSequence: boolean;
   setTimerData: () => void;
   setCurrentIntervalID: (id: NodeJS.Timeout) => void;
@@ -31,6 +32,7 @@ interface TimerState {
   clearTimer: () => void;
   /* used to change the session type within the SessionButton*/
   setSessionType: (id: SessionTypes) => void;
+  setCurrentDialogNavItem: (id: "general" | "timers") => void;
 }
 
 export const useTimerStore = create<TimerState>()(
@@ -44,7 +46,7 @@ export const useTimerStore = create<TimerState>()(
     sessionData: { pomodoro: 25, shortBreak: 5, longBreak: 15 },
     intervalID: "",
     isCountDownOn: false,
-
+    currentDialogNavItem: "timers",
     customSequence: false,
 
     setTimerData: () =>
@@ -110,5 +112,6 @@ export const useTimerStore = create<TimerState>()(
           isCountDownOn: false,
         };
       }),
+    setCurrentDialogNavItem: (id) => set(() => ({ currentDialogNavItem: id })),
   }))
 );
