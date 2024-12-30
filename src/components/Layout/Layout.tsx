@@ -2,7 +2,7 @@ import { FC, PropsWithChildren } from "react";
 
 const Layout: FC<PropsWithChildren> = ({ children }) => {
   return (
-    <main className="size-1/3 fixed bottom-[20%] left-[33%]">{children}</main>
+    <main className="size-1/2 fixed bottom-[10%] left-[25%]">{children}</main>
   );
 };
 
