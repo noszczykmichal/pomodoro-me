@@ -1,19 +1,14 @@
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
-import { SessionTypes, DialogNavItem } from "@/types/types";
-
-type SessionData = {
-  [key in SessionTypes]: number;
-};
+import { SessionTypes, SessionData, DialogNavItem } from "@/types/types";
 
 interface TimerState {
   /** used to specify the active session type; utilized in the SessionButton to apply
    * styles that indicate which session is currently active  */
   activeSession: SessionTypes;
-  /** allows tracking the count of short breaks and, consequently the number of completed
-   * working sessions */
-  shortBreakCount: number;
+  /** utilized for displaying number of completed working sessions  */
+  workingSessionsCount: number;
   /** stores the current reading of the timer */
   timerData: { minutes: number; seconds: number };
   /** current length settings for each session type */
@@ -38,7 +33,7 @@ interface TimerState {
 export const useTimerStore = create<TimerState>()(
   immer((set) => ({
     activeSession: SessionTypes.Pomodoro,
-    shortBreakCount: 0,
+    workingSessionsCount: 0,
     timerData: {
       minutes: 25,
       seconds: 0,
@@ -55,17 +50,17 @@ export const useTimerStore = create<TimerState>()(
 
         if (seconds === 0) {
           if (minutes === 0) {
-            const updatedShortBreakCount =
-              state.activeSession === SessionTypes.ShortBreak
-                ? state.shortBreakCount + 1
-                : state.shortBreakCount;
+            const updatedWorkingSessionCount =
+              state.activeSession === SessionTypes.Pomodoro
+                ? state.workingSessionsCount + 1
+                : state.workingSessionsCount;
 
             const nextSession =
               state.activeSession === SessionTypes.Pomodoro
                 ? SessionTypes.ShortBreak
                 : state.activeSession !== SessionTypes.LongBreak &&
-                  state.shortBreakCount !== 0 &&
-                  updatedShortBreakCount % 4 === 0
+                  state.workingSessionsCount !== 0 &&
+                  updatedWorkingSessionCount % 4 === 0
                 ? SessionTypes.LongBreak
                 : SessionTypes.Pomodoro;
 
@@ -73,7 +68,7 @@ export const useTimerStore = create<TimerState>()(
 
             return {
               activeSession: nextSession,
-              shortBreakCount: updatedShortBreakCount,
+              workingSessionsCount: updatedWorkingSessionCount,
               timerData: {
                 minutes: nextSessionMinutes,
                 seconds: 0,
