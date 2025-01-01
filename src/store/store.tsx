@@ -19,8 +19,10 @@ interface TimerState {
   /** used within TimerControls to switch the button text between start/pause */
   isCountDownOn: boolean;
   currentDialogNavItem: DialogNavItem;
-  customSequence: boolean;
+  isSettingsDialogOpen: boolean;
+  isUsingPomodoroSequence: boolean;
   setTimerData: () => void;
+  setSessionData: (data: SessionData) => void;
   setCurrentIntervalID: (id: NodeJS.Timeout) => void;
   setIsCountDownOn: (val: boolean) => void;
   /** used within the RefreshButton to reset the current reading of the timer */
@@ -28,6 +30,8 @@ interface TimerState {
   /* used to change the session type within the SessionButton*/
   setSessionType: (id: SessionTypes) => void;
   setCurrentDialogNavItem: (id: "general" | "timers") => void;
+  setIsSettingsDialogOpen: () => void;
+  setIsUsingPomodoroSequence: (val: boolean) => void;
 }
 
 export const useTimerStore = create<TimerState>()(
@@ -42,7 +46,8 @@ export const useTimerStore = create<TimerState>()(
     intervalID: "",
     isCountDownOn: false,
     currentDialogNavItem: "timers",
-    customSequence: false,
+    isSettingsDialogOpen: false,
+    isUsingPomodoroSequence: false,
 
     setTimerData: () =>
       set((state) => {
@@ -82,6 +87,14 @@ export const useTimerStore = create<TimerState>()(
 
         return { timerData: { minutes, seconds: seconds - 1 } };
       }),
+    setSessionData: (data) =>
+      set((state) => ({
+        sessionData: data,
+        timerData: {
+          minutes: data[state.activeSession],
+          seconds: 0,
+        },
+      })),
     setCurrentIntervalID: (id) => set(() => ({ intervalID: id })),
     setIsCountDownOn: (val) => set(() => ({ isCountDownOn: val })),
     clearTimer: () =>
@@ -108,5 +121,11 @@ export const useTimerStore = create<TimerState>()(
         };
       }),
     setCurrentDialogNavItem: (id) => set(() => ({ currentDialogNavItem: id })),
+    setIsSettingsDialogOpen: () =>
+      set((state) => ({ isSettingsDialogOpen: !state.isSettingsDialogOpen })),
+    setIsUsingPomodoroSequence: (val) =>
+      set(() => ({
+        isUsingPomodoroSequence: val,
+      })),
   }))
 );

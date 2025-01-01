@@ -17,7 +17,9 @@ const Sessions = () => {
 
   const sessionsDisplayContent =
     workingSessionsCount <= 5 ? (
-      Array(workingSessionsCount).fill(<TomatoIcon />)
+      Array.from({ length: workingSessionsCount }, (_, index) => (
+        <TomatoIcon key={index} />
+      ))
     ) : (
       <>
         {workingSessionsCount}x<TomatoIcon className="ml-[2px]" />
