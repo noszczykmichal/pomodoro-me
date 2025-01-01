@@ -4,4 +4,8 @@ export enum SessionTypes {
   LongBreak = "longBreak",
 }
 
+export type SessionData = {
+  [key in SessionTypes]: number;
+};
+
 export type DialogNavItem = "general" | "timers";
