@@ -6,13 +6,17 @@ import TimersSettings from "../TimersSettings/TimersSettings";
 const NavigationMenu = () => {
   const navConfig = [{ id: "timers", label: "Timers" }];
 
-  const defaults = { pomodoro: 25, shortBreak: 5, longBreak: 15 };
+  const defaults = {
+    inputs: { pomodoro: 25, shortBreak: 5, longBreak: 15 },
+    pomodoroSequenceOn: false,
+  };
 
   const {
     currentDialogNavItem,
     setCurrentDialogNavItem,
-    setSessionData,
-    setIsUsingPomodoroSequence,
+    // setSessionData,
+    setTimersSettings,
+    // setIsUsingPomodoroSequence,
   } = useTimerStore((state) => state);
 
   const onNavItemClick = (id: DialogNavItem) => () => {
@@ -30,8 +34,9 @@ const NavigationMenu = () => {
   }
 
   const onResetButtonClick = () => {
-    setSessionData(defaults);
-    setIsUsingPomodoroSequence(false);
+    // setSessionData(defaults);
+    // setIsUsingPomodoroSequence(false);
+    setTimersSettings(defaults);
   };
 
   return (

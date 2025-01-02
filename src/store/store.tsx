@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 
-import { SessionTypes, SessionData, DialogNavItem } from "@/types/types";
+import { SessionTypes, TimersSettings, DialogNavItem } from "@/types/types";
 
 interface TimerState {
   /** used to specify the active session type; utilized in the SessionButton to apply
@@ -12,7 +12,13 @@ interface TimerState {
   /** stores the current reading of the timer */
   timerData: { minutes: number; seconds: number };
   /** current length settings for each session type */
-  sessionData: SessionData;
+  // sessionData: SessionData;
+  settings: {
+    timers: {
+      inputs: { pomodoro: number; shortBreak: number; longBreak: number };
+      pomodoroSequenceOn: boolean;
+    };
+  };
   /** used for storing the id of the currently running setInterval; utilized for pausing and resuming
    * the currently running timer */
   intervalID: string;
@@ -22,7 +28,7 @@ interface TimerState {
   isSettingsDialogOpen: boolean;
   isUsingPomodoroSequence: boolean;
   setTimerData: () => void;
-  setSessionData: (data: SessionData) => void;
+  setTimersSettings: (data: TimersSettings) => void;
   setCurrentIntervalID: (id: NodeJS.Timeout) => void;
   setIsCountDownOn: (val: boolean) => void;
   /** used within the RefreshButton to reset the current reading of the timer */
@@ -42,7 +48,13 @@ export const useTimerStore = create<TimerState>()(
       minutes: 25,
       seconds: 0,
     },
-    sessionData: { pomodoro: 25, shortBreak: 5, longBreak: 15 },
+    // sessionData: { pomodoro: 25, shortBreak: 5, longBreak: 15 },
+    settings: {
+      timers: {
+        inputs: { pomodoro: 25, shortBreak: 5, longBreak: 15 },
+        pomodoroSequenceOn: false,
+      },
+    },
     intervalID: "",
     isCountDownOn: false,
     currentDialogNavItem: "timers",
@@ -69,7 +81,9 @@ export const useTimerStore = create<TimerState>()(
                 ? SessionTypes.LongBreak
                 : SessionTypes.Pomodoro;
 
-            const nextSessionMinutes = state.sessionData[nextSession];
+            // const nextSessionMinutes = state.sessionData[nextSession];
+            const nextSessionMinutes =
+              state.settings.timers.inputs[nextSession];
 
             return {
               activeSession: nextSession,
@@ -87,20 +101,19 @@ export const useTimerStore = create<TimerState>()(
 
         return { timerData: { minutes, seconds: seconds - 1 } };
       }),
-    setSessionData: (data) =>
+    setTimersSettings: (data) =>
       set((state) => ({
-        sessionData: data,
-        timerData: {
-          minutes: data[state.activeSession],
-          seconds: 0,
-        },
+        settings: { timers: data },
+        timerData: { minutes: data.inputs[state.activeSession], seconds: 0 },
       })),
     setCurrentIntervalID: (id) => set(() => ({ intervalID: id })),
     setIsCountDownOn: (val) => set(() => ({ isCountDownOn: val })),
     clearTimer: () =>
       set((state) => {
         clearTimeout(state.intervalID);
-        const minutesForActiveSession = state.sessionData[state.activeSession];
+        // const minutesForActiveSession = state.sessionData[state.activeSession];
+        const minutesForActiveSession =
+          state.settings.timers.inputs[state.activeSession];
         return {
           timerData: { minutes: minutesForActiveSession, seconds: 0 },
           isCountDownOn: false,
@@ -115,7 +128,8 @@ export const useTimerStore = create<TimerState>()(
         clearTimeout(state.intervalID);
         return {
           activeSession: id,
-          timerData: { minutes: state.sessionData[id], seconds: 0 },
+          // timerData: { minutes: state.sessionData[id], seconds: 0 },
+          timerData: { minutes: state.settings.timers.inputs[id], seconds: 0 },
           intervalID: "",
           isCountDownOn: false,
         };

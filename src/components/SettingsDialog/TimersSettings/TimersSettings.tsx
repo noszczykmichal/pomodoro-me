@@ -15,16 +15,18 @@ const timersSettingsConfig = [
 
 const TimersSettings = () => {
   const {
-    sessionData,
+    settings,
     isUsingPomodoroSequence,
     setIsSettingsDialogOpen,
-    setSessionData,
-    setIsUsingPomodoroSequence,
+    setTimersSettings,
+    // setIsUsingPomodoroSequence,
   } = useTimerStore((state) => state);
+
+  const { timers } = settings;
 
   // Initialize state with default values from config
   const initialFormState = timersSettingsConfig.reduce((acc, input) => {
-    acc[input.id as SessionTypes] = sessionData[input.id as SessionTypes];
+    acc[input.id as SessionTypes] = timers.inputs[input.id as SessionTypes];
     return acc;
   }, {} as SessionData);
 
@@ -61,8 +63,10 @@ const TimersSettings = () => {
 
   const onFormSubmitHandler = (e: FormEvent) => {
     e.preventDefault();
-    setSessionData(formState);
-    setIsUsingPomodoroSequence(pomodoroSequenceOn);
+    // setSessionData(formState);
+    const data = { inputs: formState, pomodoroSequenceOn };
+    setTimersSettings(data);
+    // setIsUsingPomodoroSequence(pomodoroSequenceOn);
     setIsSettingsDialogOpen();
   };
 
