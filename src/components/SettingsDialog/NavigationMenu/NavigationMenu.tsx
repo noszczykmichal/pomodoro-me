@@ -1,23 +1,29 @@
+import { useRef } from "react";
+
 import { useTimerStore } from "@/store/store";
-import { DialogNavItem } from "@/types/types";
+import { DialogNavItem, SessionData } from "@/types/types";
 import { Button } from "@/components/ui/button";
 import TimersSettings from "../TimersSettings/TimersSettings";
+
+interface TimersSettingsRef {
+  resetTimersSettings: (data: SessionData) => void;
+  resetPomodoroSequence: (val: boolean) => void;
+}
 
 const NavigationMenu = () => {
   const navConfig = [{ id: "timers", label: "Timers" }];
 
   const defaults = {
-    inputs: { pomodoro: 25, shortBreak: 5, longBreak: 15 },
-    pomodoroSequenceOn: false,
+    timers: {
+      inputs: { pomodoro: 25, shortBreak: 5, longBreak: 15 },
+      pomodoroSequenceOn: false,
+    },
   };
 
-  const {
-    currentDialogNavItem,
-    setCurrentDialogNavItem,
-    // setSessionData,
-    setTimersSettings,
-    // setIsUsingPomodoroSequence,
-  } = useTimerStore((state) => state);
+  const timersSettingsRef = useRef<TimersSettingsRef>(null);
+
+  const { currentDialogNavItem, setCurrentDialogNavItem, setTimersSettings } =
+    useTimerStore((state) => state);
 
   const onNavItemClick = (id: DialogNavItem) => () => {
     setCurrentDialogNavItem(id);
@@ -27,16 +33,18 @@ const NavigationMenu = () => {
 
   switch (currentDialogNavItem) {
     case "timers":
-      contentsOfViewPort = <TimersSettings />;
+      contentsOfViewPort = <TimersSettings ref={timersSettingsRef} />;
       break;
     default:
       return null;
   }
 
   const onResetButtonClick = () => {
-    // setSessionData(defaults);
-    // setIsUsingPomodoroSequence(false);
-    setTimersSettings(defaults);
+    setTimersSettings(defaults.timers);
+    timersSettingsRef.current!.resetTimersSettings(defaults.timers.inputs);
+    timersSettingsRef.current!.resetPomodoroSequence(
+      defaults.timers.pomodoroSequenceOn
+    );
   };
 
   return (

@@ -1,4 +1,10 @@
-import { useState, ChangeEvent, FormEvent } from "react";
+import {
+  useState,
+  ChangeEvent,
+  FormEvent,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
@@ -13,14 +19,9 @@ const timersSettingsConfig = [
   { id: "longBreak", label: "Long Break" },
 ];
 
-const TimersSettings = () => {
-  const {
-    settings,
-    isUsingPomodoroSequence,
-    setIsSettingsDialogOpen,
-    setTimersSettings,
-    // setIsUsingPomodoroSequence,
-  } = useTimerStore((state) => state);
+const TimersSettings = forwardRef((_props, ref) => {
+  const { settings, setIsSettingsDialogOpen, setTimersSettings } =
+    useTimerStore((state) => state);
 
   const { timers } = settings;
 
@@ -32,7 +33,20 @@ const TimersSettings = () => {
 
   const [formState, setFormState] = useState(initialFormState);
   const [pomodoroSequenceOn, setPomodoroSequenceOn] = useState(
-    isUsingPomodoroSequence
+    timers.pomodoroSequenceOn
+  );
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      resetTimersSettings(data: SessionData) {
+        setFormState(data);
+      },
+      resetPomodoroSequence(val: boolean) {
+        setPomodoroSequenceOn(val);
+      },
+    }),
+    []
   );
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
@@ -48,14 +62,6 @@ const TimersSettings = () => {
     }));
   };
 
-  const toggleChangeHandler = () => {
-    const pomodoroSequenceCheckbox: HTMLElement =
-      document.getElementById("toggle")!;
-    const checkBoxValue = pomodoroSequenceCheckbox?.ariaChecked === "true";
-
-    setPomodoroSequenceOn(checkBoxValue);
-  };
-
   const onCloseButtonClick = (e: FormEvent) => {
     e.preventDefault();
     setIsSettingsDialogOpen();
@@ -63,10 +69,8 @@ const TimersSettings = () => {
 
   const onFormSubmitHandler = (e: FormEvent) => {
     e.preventDefault();
-    // setSessionData(formState);
     const data = { inputs: formState, pomodoroSequenceOn };
     setTimersSettings(data);
-    // setIsUsingPomodoroSequence(pomodoroSequenceOn);
     setIsSettingsDialogOpen();
   };
 
@@ -99,8 +103,8 @@ const TimersSettings = () => {
             <Switch
               id="toggle"
               className="data-[state=unchecked]:border-[#6d6d6d] data-[state=unchecked]:bg-black h-[20px] [&>span]:bg-[#6d6d6d] [&>span]:h-[14px] [&>span]:w-[14px] [&>span]:ml-[2px] data-[state=checked]:bg-black  data-[state=checked]:border-[#5ece7b]"
-              // checked={pomodoroSequenceOn.toString()}
-              onCheckedChange={toggleChangeHandler}
+              checked={pomodoroSequenceOn}
+              onCheckedChange={setPomodoroSequenceOn}
             />
             <Label className="ml-[10px] leading-[21px] text-justify">
               Use the Pomodoro sequence: Pomodoro → short break, repeat 4x, then
@@ -126,6 +130,6 @@ const TimersSettings = () => {
       </form>
     </div>
   );
-};
+});
 
 export default TimersSettings;
