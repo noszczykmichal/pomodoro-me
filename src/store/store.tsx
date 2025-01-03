@@ -11,22 +11,21 @@ interface TimerState {
   workingSessionsCount: number;
   /** stores the current reading of the timer */
   timerData: { minutes: number; seconds: number };
-  /** current length settings for each session type */
-  // sessionData: SessionData;
+  /** user settings - currently limited to timers settings; used for storing the
+   * duration of each timer, and for toggling the pomodoro sequence on or off */
   settings: {
     timers: {
       inputs: { pomodoro: number; shortBreak: number; longBreak: number };
       pomodoroSequenceOn: boolean;
     };
   };
-  /** used for storing the id of the currently running setInterval; utilized for pausing and resuming
-   * the currently running timer */
+  /** used for storing the id of the currently running setInterval; utilized for
+   * pausing and resuming the currently running timer */
   intervalID: string;
   /** used within TimerControls to switch the button text between start/pause */
   isCountDownOn: boolean;
   currentDialogNavItem: DialogNavItem;
   isSettingsDialogOpen: boolean;
-  isUsingPomodoroSequence: boolean;
   setTimerData: () => void;
   setTimersSettings: (data: TimersSettings) => void;
   setCurrentIntervalID: (id: NodeJS.Timeout) => void;
@@ -35,9 +34,8 @@ interface TimerState {
   clearTimer: () => void;
   /* used to change the session type within the SessionButton*/
   setSessionType: (id: SessionTypes) => void;
-  setCurrentDialogNavItem: (id: "general" | "timers") => void;
+  setCurrentDialogNavItem: (id: "timers") => void;
   setIsSettingsDialogOpen: () => void;
-  setIsUsingPomodoroSequence: (val: boolean) => void;
 }
 
 export const useTimerStore = create<TimerState>()(
@@ -48,7 +46,6 @@ export const useTimerStore = create<TimerState>()(
       minutes: 25,
       seconds: 0,
     },
-    // sessionData: { pomodoro: 25, shortBreak: 5, longBreak: 15 },
     settings: {
       timers: {
         inputs: { pomodoro: 25, shortBreak: 5, longBreak: 15 },
@@ -59,8 +56,6 @@ export const useTimerStore = create<TimerState>()(
     isCountDownOn: false,
     currentDialogNavItem: "timers",
     isSettingsDialogOpen: false,
-    isUsingPomodoroSequence: false,
-
     setTimerData: () =>
       set((state) => {
         const { minutes, seconds } = state.timerData;
@@ -81,7 +76,6 @@ export const useTimerStore = create<TimerState>()(
                 ? SessionTypes.LongBreak
                 : SessionTypes.Pomodoro;
 
-            // const nextSessionMinutes = state.sessionData[nextSession];
             const nextSessionMinutes =
               state.settings.timers.inputs[nextSession];
 
@@ -111,7 +105,6 @@ export const useTimerStore = create<TimerState>()(
     clearTimer: () =>
       set((state) => {
         clearTimeout(state.intervalID);
-        // const minutesForActiveSession = state.sessionData[state.activeSession];
         const minutesForActiveSession =
           state.settings.timers.inputs[state.activeSession];
         return {
@@ -128,7 +121,6 @@ export const useTimerStore = create<TimerState>()(
         clearTimeout(state.intervalID);
         return {
           activeSession: id,
-          // timerData: { minutes: state.sessionData[id], seconds: 0 },
           timerData: { minutes: state.settings.timers.inputs[id], seconds: 0 },
           intervalID: "",
           isCountDownOn: false,
@@ -137,9 +129,5 @@ export const useTimerStore = create<TimerState>()(
     setCurrentDialogNavItem: (id) => set(() => ({ currentDialogNavItem: id })),
     setIsSettingsDialogOpen: () =>
       set((state) => ({ isSettingsDialogOpen: !state.isSettingsDialogOpen })),
-    setIsUsingPomodoroSequence: (val) =>
-      set(() => ({
-        isUsingPomodoroSequence: val,
-      })),
   }))
 );

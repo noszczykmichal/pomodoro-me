@@ -13,4 +13,4 @@ export interface TimersSettings {
   pomodoroSequenceOn: boolean;
 }
 
-export type DialogNavItem = "general" | "timers";
+export type DialogNavItem = "timers";
