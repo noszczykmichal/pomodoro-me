@@ -10,7 +10,7 @@ export type SessionData = {
 
 export interface TimersSettings {
   inputs: SessionData;
-  pomodoroSequenceOn: boolean;
+  isPomodoroSequenceOn: boolean;
 }
 
 export type DialogNavItem = "timers";

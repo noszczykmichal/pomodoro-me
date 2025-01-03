@@ -23,6 +23,13 @@ const TimersSettings = forwardRef((_props, ref) => {
   const { settings, setIsSettingsDialogOpen, setTimersSettings } =
     useTimerStore((state) => state);
 
+  const { inputs, isPomodoroSequenceOn } = settings.timers;
+  const {
+    pomodoro: pomodoroLength,
+    shortBreak: shortBreakLength,
+    longBreak: LongBreakLength,
+  } = inputs;
+
   const { timers } = settings;
 
   // Initialize state with default values from config
@@ -33,7 +40,7 @@ const TimersSettings = forwardRef((_props, ref) => {
 
   const [formState, setFormState] = useState(initialFormState);
   const [pomodoroSequenceOn, setPomodoroSequenceOn] = useState(
-    timers.pomodoroSequenceOn
+    timers.isPomodoroSequenceOn
   );
 
   useImperativeHandle(
@@ -69,8 +76,22 @@ const TimersSettings = forwardRef((_props, ref) => {
 
   const onFormSubmitHandler = (e: FormEvent) => {
     e.preventDefault();
-    const data = { inputs: formState, pomodoroSequenceOn };
-    setTimersSettings(data);
+    const data = {
+      inputs: formState,
+      isPomodoroSequenceOn: pomodoroSequenceOn,
+    };
+
+    const settingsHaveChanged =
+      formState.pomodoro !== pomodoroLength ||
+      formState.shortBreak !== shortBreakLength ||
+      formState.longBreak !== LongBreakLength ||
+      pomodoroSequenceOn !== isPomodoroSequenceOn;
+
+    if (settingsHaveChanged) {
+      setTimersSettings(data);
+      return setIsSettingsDialogOpen();
+    }
+
     setIsSettingsDialogOpen();
   };
 

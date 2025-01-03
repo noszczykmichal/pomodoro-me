@@ -14,10 +14,7 @@ interface TimerState {
   /** user settings - currently limited to timers settings; used for storing the
    * duration of each timer, and for toggling the pomodoro sequence on or off */
   settings: {
-    timers: {
-      inputs: { pomodoro: number; shortBreak: number; longBreak: number };
-      pomodoroSequenceOn: boolean;
-    };
+    timers: TimersSettings;
   };
   /** used for storing the id of the currently running setInterval; utilized for
    * pausing and resuming the currently running timer */
@@ -49,7 +46,7 @@ export const useTimerStore = create<TimerState>()(
     settings: {
       timers: {
         inputs: { pomodoro: 25, shortBreak: 5, longBreak: 15 },
-        pomodoroSequenceOn: false,
+        isPomodoroSequenceOn: false,
       },
     },
     intervalID: "",
@@ -59,6 +56,27 @@ export const useTimerStore = create<TimerState>()(
     setTimerData: () =>
       set((state) => {
         const { minutes, seconds } = state.timerData;
+        const { isPomodoroSequenceOn } = state.settings.timers;
+
+        if (!isPomodoroSequenceOn) {
+          if (seconds === 0) {
+            if (minutes === 0) {
+              clearTimeout(state.intervalID);
+              const minutesForActiveSession =
+                state.settings.timers.inputs[state.activeSession];
+              return {
+                timerData: { minutes: minutesForActiveSession, seconds: 0 },
+                isCountDownOn: false,
+                intervalID: "",
+              };
+            }
+            return {
+              timerData: { minutes: minutes - 1, seconds: 59 },
+            };
+          }
+
+          return { timerData: { minutes, seconds: seconds - 1 } };
+        }
 
         if (seconds === 0) {
           if (minutes === 0) {
@@ -68,7 +86,8 @@ export const useTimerStore = create<TimerState>()(
                 : state.workingSessionsCount;
 
             const nextSession =
-              state.activeSession === SessionTypes.Pomodoro
+              state.activeSession === SessionTypes.Pomodoro &&
+              updatedWorkingSessionCount % 4 !== 0
                 ? SessionTypes.ShortBreak
                 : state.activeSession !== SessionTypes.LongBreak &&
                   state.workingSessionsCount !== 0 &&
@@ -96,10 +115,15 @@ export const useTimerStore = create<TimerState>()(
         return { timerData: { minutes, seconds: seconds - 1 } };
       }),
     setTimersSettings: (data) =>
-      set((state) => ({
-        settings: { timers: data },
-        timerData: { minutes: data.inputs[state.activeSession], seconds: 0 },
-      })),
+      set((state) => {
+        clearTimeout(state.intervalID);
+        return {
+          settings: { timers: data },
+          timerData: { minutes: data.inputs[state.activeSession], seconds: 0 },
+          isCountDownOn: false,
+          intervalID: "",
+        };
+      }),
     setCurrentIntervalID: (id) => set(() => ({ intervalID: id })),
     setIsCountDownOn: (val) => set(() => ({ isCountDownOn: val })),
     clearTimer: () =>
