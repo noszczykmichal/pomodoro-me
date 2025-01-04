@@ -16,7 +16,7 @@ const NavigationMenu = () => {
   const defaults = {
     timers: {
       inputs: { pomodoro: 25, shortBreak: 5, longBreak: 15 },
-      pomodoroSequenceOn: false,
+      isPomodoroSequenceOn: false,
     },
   };
 
@@ -43,7 +43,7 @@ const NavigationMenu = () => {
     setTimersSettings(defaults.timers);
     timersSettingsRef.current!.resetTimersSettings(defaults.timers.inputs);
     timersSettingsRef.current!.resetPomodoroSequence(
-      defaults.timers.pomodoroSequenceOn
+      defaults.timers.isPomodoroSequenceOn
     );
   };
 

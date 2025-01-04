@@ -24,6 +24,7 @@ const TimerControls = () => {
     const intervalRef = setInterval(setTimerData, 1000);
     setCurrentIntervalID(intervalRef);
   };
+
   return (
     <div className="flex space justify-around pt-[20px]">
       <Button
