@@ -7,11 +7,9 @@ const TimerControls = () => {
   const {
     intervalID,
     isCountDownOn,
-
     setTimerData,
     setCurrentIntervalID,
     setIsCountDownOn,
-    clearTimer,
   } = useTimerStore((state) => state);
 
   const buttonClickHandler = () => {
@@ -35,7 +33,7 @@ const TimerControls = () => {
       >
         {isCountDownOn ? "pause" : "start"}
       </Button>
-      <RefreshButton onButtonClick={clearTimer} />
+      <RefreshButton />
       <SettingsDialog />
     </div>
   );

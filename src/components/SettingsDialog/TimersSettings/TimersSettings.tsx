@@ -63,9 +63,11 @@ const TimersSettings = forwardRef((_props, ref) => {
       return;
     }
 
+    const inputValue = e.target.value;
+
     setFormState((prevState) => ({
       ...prevState,
-      [eventTargetName]: +e.target.value,
+      [eventTargetName]: inputValue === "" ? "" : +inputValue,
     }));
   };
 
@@ -113,6 +115,7 @@ const TimersSettings = forwardRef((_props, ref) => {
                 className="bg-black text-white border-[#6d6d6d] h-[35px]"
                 value={formState[inputEl.id as SessionTypes]}
                 onChange={onChangeHandler}
+                min={1}
               />
               <div className="text-[14px] text-[#adb5bd]">minutes</div>
             </div>
