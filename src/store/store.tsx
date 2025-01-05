@@ -61,14 +61,8 @@ export const useTimerStore = create<TimerState>()(
         if (!isPomodoroSequenceOn) {
           if (seconds === 0) {
             if (minutes === 0) {
-              clearTimeout(state.intervalID);
-              const minutesForActiveSession =
-                state.settings.timers.inputs[state.activeSession];
-              return {
-                timerData: { minutes: minutesForActiveSession, seconds: 0 },
-                isCountDownOn: false,
-                intervalID: "",
-              };
+              state.clearTimer();
+              return {};
             }
             return {
               timerData: { minutes: minutes - 1, seconds: 59 },

@@ -1,16 +1,14 @@
-import { FC } from "react";
+import { useTimerStore } from "@/store/store";
 import { RotateCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-interface RefreshButtonProps {
-  onButtonClick: () => void;
-}
+const RefreshButton = () => {
+  const { clearTimer } = useTimerStore((state) => state);
 
-const RefreshButton: FC<RefreshButtonProps> = ({ onButtonClick }) => {
   const rotateHandler = () => {
     const refreshIcon = document.getElementById("refresh") as HTMLButtonElement;
     refreshIcon?.classList.add("refresh-button-animation");
-    onButtonClick();
+    clearTimer();
     setTimeout(() => {
       refreshIcon?.classList.remove("refresh-button-animation");
     }, 600);
