@@ -100,24 +100,26 @@ const TimersSettings = forwardRef((_props, ref) => {
   return (
     <div>
       <form className="flex-col" onSubmit={onFormSubmitHandler}>
-        <div className="flex justify-between">
+        <div className="flex-col xsm:flex-row flex justify-between">
           {timersSettingsConfig.map((inputEl) => (
-            <div className="w-1/4" key={inputEl.id}>
+            <div className="xsm:w-1/4" key={inputEl.id}>
               <Label
                 htmlFor={inputEl.id}
-                className="text-[14px] whitespace-nowrap font-custom"
+                className="text-[12px] xsm:text-[14px] whitespace-nowrap font-custom"
               >
                 {inputEl.label}
               </Label>
               <Input
                 type="number"
                 name={inputEl.id}
-                className="bg-black text-white border-[#6d6d6d] h-[35px]"
+                className="bg-black text-white text-[12px] xsm:text-[14px] border-[#6d6d6d] h-[35px]"
                 value={formState[inputEl.id as SessionTypes]}
                 onChange={onChangeHandler}
                 min={1}
               />
-              <div className="text-[14px] text-[#adb5bd]">minutes</div>
+              <div className="text-[12px] xsm:text-[14px] text-[#adb5bd]">
+                minutes
+              </div>
             </div>
           ))}
         </div>
@@ -130,24 +132,24 @@ const TimersSettings = forwardRef((_props, ref) => {
               checked={pomodoroSequenceOn}
               onCheckedChange={setPomodoroSequenceOn}
             />
-            <Label className="ml-[10px] leading-[21px] text-justify">
+            <Label className="ml-[10px] leading-[21px] text-justify text-[12px] xsm:text-[14px]">
               Use the Pomodoro sequence: Pomodoro → short break, repeat 4x, then
               one long break
             </Label>
           </div>
-          <p className="ml-[10px] text-[14px] text-[#6d6d6d] text-justify leading-[14px] mt-[10px] col-start-2 col-end-3">
+          <p className="ml-[10px] text-[12px] xsm:text-[14px] text-[#6d6d6d] text-justify  leading-[14px] mt-[10px] col-start-2 col-end-3">
             Number of completed working sessions indicated by the count of
             tomatoes under 'Pomodoro'
           </p>
         </div>
         <div className="mt-[50px] flex justify-end space-x-[10px]">
           <Button
-            className="rounded-[20px] bg-[#6d6d6d] hover:bg-[#dc3545]"
+            className="rounded-[20px] bg-[#6d6d6d] text-[12px] xsm:text-[14px]  hover:bg-[#dc3545]"
             onClick={onCloseButtonClick}
           >
             Close
           </Button>
-          <Button className="rounded-[20px] bg-[#fff] text-[#000] hover:bg-[#5ece7b]">
+          <Button className="rounded-[20px] bg-[#fff] text-[#000] text-[12px] xsm:text-[14px] hover:bg-[#5ece7b]">
             Save Changes
           </Button>
         </div>

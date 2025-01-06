@@ -22,9 +22,9 @@ const SettingsDialog = () => {
       <DialogTrigger className="settings_button">
         <SettingsButton />
       </DialogTrigger>
-      <DialogContent className=" bg-black text-white border-none ">
+      <DialogContent className="bg-black text-white border-none w-[95%] rounded-[10px]">
         <DialogHeader>
-          <DialogTitle>Settings</DialogTitle>
+          <DialogTitle className="text-left">Settings</DialogTitle>
         </DialogHeader>
         <NavigationMenu />
       </DialogContent>
