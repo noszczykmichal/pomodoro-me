@@ -27,12 +27,20 @@ const Sessions = () => {
     );
 
   return (
-    <header>
-      {sessionsConfig.map((session) => (
-        <SessionButton key={session.id} id={session.id} label={session.name} />
-      ))}
-      <div className="flex w-[116px] min-h-[18px] justify-center pt-[3px] text-[#fff] text-[14px] items-center">
-        {sessionsDisplayContent}
+    <header className="flex flex-col items-center gap-4">
+      <div className="flex flex-col xxsm:flex-row items-center justify-between gap-4">
+        {sessionsConfig.map((session) => (
+          <SessionButton
+            key={session.id}
+            id={session.id}
+            label={session.name}
+          />
+        ))}
+      </div>
+      <div className="place-self-start">
+        <div className="flex w-[90px] xsm:w-[116px] min-h-[18px] justify-start pt-[3px] text-[#fff] text-[14px] items-center">
+          {sessionsDisplayContent}
+        </div>
       </div>
     </header>
   );

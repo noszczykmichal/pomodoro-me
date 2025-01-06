@@ -49,11 +49,14 @@ const NavigationMenu = () => {
 
   return (
     <div className="grid grid-cols-10">
-      <div className="flex flex-col col-span-2 justify-between h-full">
+      <div className="col-span-2 flex flex-col justify-between h-full">
         <fieldset>
           {navConfig.map((navItem) => (
             <li key={navItem.id} className="list-none" tabIndex={0}>
-              <label htmlFor={navItem.id} className="py-1 text-[#fff] ">
+              <label
+                htmlFor={navItem.id}
+                className="py-1 text-[#fff] text-[14px] xsm:text-[16px]"
+              >
                 {navItem.label}
                 <input
                   id={navItem.id}
@@ -69,7 +72,7 @@ const NavigationMenu = () => {
         </fieldset>
         <Button
           onClick={onResetButtonClick}
-          className="rounded-[20px] bg-black border-[1px] border-solid border-[#dc3545] text-[#dc3545] hover:bg-[#dc3545] hover:text-[#fff]"
+          className="rounded-[20px] bg-black border-[1px] border-solid border-[#dc3545] text-[#dc3545] hover:bg-[#dc3545] hover:text-[#fff] text-[12px] xsm:text-[14px]"
         >
           Reset all
         </Button>
