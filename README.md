@@ -1,50 +1,77 @@
-# React + TypeScript + Vite
+<div align="center">
+  <img alt="Logo" src="https://raw.githubusercontent.com/noszczykmichal/pomodoro-me/main/public/web-app-manifest-192x192.png" width="100" />
+</div>
+<h1 align="center">
+Pomodoro Me
+</h1>
+<p align="center">
+  A Pomodoro timer app built with <a href="https://react.dev/" target="_blank">React</a> and <a href="https://www.typescriptlang.org/" target="_blank">Typescript</a>, and hosted on <a href="https://firebase.google.com/" target="_blank">Firebase</a>.
+</p>
+<p align="center">
+  <a href="https://pomodoro-me-4ce8a.web.app/" target="_blank">Live demo</a>
+</p>
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![demo](https://raw.githubusercontent.com/noszczykmichal/pomodoro-me/main/images/demo.png)
 
-Currently, two official plugins are available:
+## Table of Contents
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- [General Info](#general-information)
+- [Technologies Used](#technologies-used)
+- [Setup](#setup)
+- [Credits](#credits)
+- [Contact](#contact)
 
-## Expanding the ESLint configuration
+## General Information
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+This is a timer implementing the Pomodoro technique, aimed at effective time management and promoting productivity. By default, the user can use it as a simple timer without following the Pomodoro principles — the timer resets to its initial value once the time has elapsed. When the appropriate option is enabled in the settings, the full Pomodoro sequence is activated, and the timer automatically alternates between work and break sessions.
 
-- Configure the top-level `parserOptions` property like this:
+![pomodoro sequence enabled](https://raw.githubusercontent.com/noszczykmichal/pomodoro-me/main/images/demo2.png)
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+After every four work sessions followed by short breaks, a long break is initiated. The number of completed work sessions is indicated by small, tomato-shaped icons displayed beneath the timer.
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+![a tomato-shaped icon displayed beneath the timer](https://raw.githubusercontent.com/noszczykmichal/pomodoro-me/main/images/demo3.png)
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+## Technologies Used
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+- [React](https://reactjs.org/blog/2022/03/29/react-v18.html)
+- [Typescript](https://www.typescriptlang.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [ShadCN](https://ui.shadcn.com/)
+- [Zustand](https://zustand-demo.pmnd.rs/)
+- [Vite](https://vite.dev/)
+- [ESLint](https://www.npmjs.com/package/eslint)
+- [Prettier](https://www.npmjs.com/package/prettier)
+
+## Setup
+
+1. Clone this repository
+
+   ```sh
+   $git clone https://github.com/noszczykmichal/pomodoro-me
+   ```
+
+2. Go into the repository
+
+   ```sh
+   $cd pomodoro-me
+   ```
+
+3. Install dependencies
+
+   ```sh
+   $npm install
+   ```
+
+4. Start the development server
+
+   ```sh
+   $npm run dev
+   ```
+
+## Credits
+
+Design inspired by https://studywithme.io/aesthetic-pomodoro-timer/.
+
+## Contact
+
+Created by [@noszczykmichal](https://michalnoszczyk.com/) - feel free to contact me!
